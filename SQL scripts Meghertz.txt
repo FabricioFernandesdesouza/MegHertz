@@ -1,0 +1,73 @@
+-- -----------------------------------------------------
+-- Schema meghertz
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `meghertz` DEFAULT CHARACTER SET utf8 ;
+USE `meghertz` ;
+
+-- -----------------------------------------------------
+-- Table `meghertz`.`agencias`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `meghertz`.`agencias` (
+  `id_agencia` INT NOT NULL AUTO_INCREMENT,
+  `nome_agencia` VARCHAR(45) NULL,
+  `logradouro_endereco` VARCHAR(45) NULL,
+  `nome_endereco` VARCHAR(255) NULL,
+  `numero_endereco` INT NULL,
+  `cidade_endereco` VARCHAR(255) NULL,
+  `estado_endereco` VARCHAR(255) NULL,
+  `cep_endereco` INT NULL,
+  `complemento_endereco` VARCHAR(255) NULL,
+  `pais_endereco` VARCHAR(45) NULL,
+  `telefone` VARCHAR(45) NULL,
+  PRIMARY KEY (`id_agencia`))
+
+
+-- -----------------------------------------------------
+-- Table `meghertz`.`contratos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `meghertz`.`contratos` (
+  `id_contratos` INT NOT NULL,
+  `file_storage_url` VARCHAR(255) NULL,
+  PRIMARY KEY (`id_contratos`))
+
+
+-- -----------------------------------------------------
+-- Table `meghertz`.`avaliacoes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `meghertz`.`avaliacoes` (
+  `id_avaliacao` INT NOT NULL,
+  `nota` INT NULL,
+  `comentario` VARCHAR(255) NULL,
+  PRIMARY KEY (`id_avaliacao`))
+
+
+-- -----------------------------------------------------
+-- Table `meghertz`.`historico`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `meghertz`.`historico` (
+  `idhistorico` INT NOT NULL AUTO_INCREMENT,
+  `idconversa` VARCHAR(45) NULL,
+  `valor_simplificado` VARCHAR(45) NULL,
+  `valor_renderizado` LONGTEXT NULL,
+  `buscou_contrato` INT NULL,
+  `buscou_agencia` INT NULL,
+  `avaliou_conversa` INT NULL,
+  PRIMARY KEY (`idhistorico`),
+  INDEX `buscou_contrato_idx` (`buscou_contrato` ASC) VISIBLE,
+  INDEX `FK_buscou_agencia_idx` (`buscou_agencia` ASC) VISIBLE,
+  INDEX `FK_avaliou_conversa_idx` (`avaliou_conversa` ASC) VISIBLE,
+  CONSTRAINT `FK_buscou_contrato`
+    FOREIGN KEY (`buscou_contrato`)
+    REFERENCES `meghertz`.`contratos` (`id_contratos`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_buscou_agencia`
+    FOREIGN KEY (`buscou_agencia`)
+    REFERENCES `meghertz`.`agencias` (`id_agencia`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_avaliou_conversa`
+    FOREIGN KEY (`avaliou_conversa`)
+    REFERENCES `meghertz`.`avaliacoes` (`id_avaliacao`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
